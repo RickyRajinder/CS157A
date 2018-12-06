@@ -170,15 +170,19 @@
             $newCustID = mt_rand(100000, 999999); //randomly generate 6-digit
             $stmt = $conn->prepare("INSERT INTO Customer VALUES ($newCustID, '$psw', '$first', '$last', '$addr', '$email', '$cardNum')");
             $stmt->execute();
+            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Thank you for registering, $first!</h2></div>";
+            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Your Customer ID is $newCustID.</h2></div>";
+            echo "<br></br>";
+            echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="login.php" class="registerbtn">Login to proceed</a></div>';
         }
         catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'>
+        <h2>Registration failed. Make sure your card number and email are valid.</h2></div>";
+            echo "<br>";
+            echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="register.php" class="registerbtn">Register to proceed</a></div>';
         }
 
-        echo "<h2>Thank you for registering, $first!</h2>";   
-        echo "<h2>Your Customer ID is $newCustID.</h2>"; 
-        echo "<br></br>";
-        echo '<a href="login.php" class="registerbtn">Login to proceed</a>';
+
     
     ?>
 </body>
