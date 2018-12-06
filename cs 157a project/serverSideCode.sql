@@ -64,3 +64,30 @@ BEGIN
     WHERE productID = OLD.productID;
 END$$
 DELIMITER ;
+
+DELIMITER
+    $$
+CREATE OR REPLACE TRIGGER checkCustomer BEFORE INSERT ON
+    Customer FOR EACH ROW
+BEGIN
+        IF(NEW.cardNumber IS NULL) THEN SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT
+        = 'card error' ;
+    END IF ; IF(NEW.cardNumber = 0) THEN SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT
+    = 'card error' ;
+END IF ; IF(NEW.cardNumber < 1000000000000000) THEN SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT
+    = 'card error' ;
+END IF ; IF(
+    NEW.email NOT REGEXP '^[^@]+@[^@]+.[^@]{2,}$'
+) THEN SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT
+    = 'email error' ;
+END IF ;
+IF EXISTS (SELECT 1 FROM customer WHERE email = New.email) THEN SIGNAL SQLSTATE '45000'
+SET MESSAGE_TEXT
+    = 'email exists' ;
+END IF ;
+END
+DELIMITER;
