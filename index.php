@@ -142,10 +142,10 @@ session_start();
         } 
 
         else{
-            echo "<h2>Login or register to proceed</h2>";
+            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Login or register to proceed</h2></div>";
             echo '<a href="login.php" class="loginbtn">Login</a>';
             echo '<a>  </a>';
-            echo '<a href="register.php" class="registerbtn">Register</a>';        
+            echo '<a href="register.php" class="registerbtn">Register</a>';
         } 
     ?>
     
