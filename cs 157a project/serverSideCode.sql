@@ -49,4 +49,4 @@ BEGIN
   SET subtotal = input;
   SET subtotal = subtotal + calculateTax(subtotal);
     RETURN subtotal + 6.99;
-END
+END //

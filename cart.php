@@ -196,6 +196,8 @@ $dbname = "clothingdatabase";
 
 
 $totalPrice = 0;
+$totalPrice2 = 0;
+$tax = 0;
 
 try {
     $conn = new PDO("mysql:host=$servername;port=3306;dbname=$dbname", $username, $password);
@@ -229,6 +231,26 @@ try {
         $totalPrice = $totalPrice + $row['price'];
     }
 
+    $stmt1 = $conn->prepare("SELECT calculateTax(" . $totalPrice . ")");
+    $stmt1->execute();
+    $result1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+    foreach($result1 as $row1)
+    {
+        $tax = $row1;
+    }
+    $tax = number_format($tax, 2);
+
+    $stmt2 = $conn->prepare("SELECT calculateTotal(" . $totalPrice . ")");
+    $stmt2->execute();
+    $result2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+    foreach($result2 as $row2)
+    {
+        $totalPrice2 = $row2;
+    }
+    $totalPrice2 = number_format($totalPrice2, 2);
+
     $conn = null;
     echo "</table>";
 
@@ -236,7 +258,13 @@ try {
     echo "Error: " . $e->getMessage();
 }
     echo '<br></br>';
-    echo "Total Price: $$totalPrice";
+    echo "Price before tax: $$totalPrice";
+    echo "<br>";
+    echo "Tax: $$tax";
+    echo "<br>";
+    echo "Shipping & Handling: $6.99";
+    echo "<br>";
+    echo "Total Price: $$totalPrice2";
     echo '<br></br>';
     echo '<a href="finalizePurchase.php?id='.$totalPrice.'" class="registerbtn">Finalize Purchase</a>';   
 
