@@ -50,3 +50,17 @@ BEGIN
   SET subtotal = subtotal + calculateTax(subtotal);
     RETURN subtotal + 6.99;
 END //
+
+DELIMITER $$
+CREATE TRIGGER deleteProductInCorrespondingTables 
+    AFTER DELETE ON Product
+    FOR EACH ROW 
+BEGIN
+    DELETE FROM Top
+    WHERE productID = OLD.productID;
+    DELETE FROM Bottom
+    WHERE productID = OLD.productID;
+    DELETE FROM Shoe
+    WHERE productID = OLD.productID;
+END$$
+DELIMITER ;
