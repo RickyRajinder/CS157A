@@ -176,10 +176,26 @@
             echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="login.php" class="registerbtn">Login to proceed</a></div>';
         }
         catch (PDOException $e) {
-            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'>
-        <h2>Registration failed. Make sure your card number and email are valid.</h2></div>";
-            echo "<br>";
-            echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="register.php" class="registerbtn">Register to proceed</a></div>';
+            $msg = $e->getMessage();
+            if (strpos($msg, "email error")) {
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'>
+                     <h2>Registration failed. Make sure your email is valid.</h2></div>";
+                echo "<br>";
+                echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="register.php" class="registerbtn">Register to proceed</a></div>';
+            }
+            if (strpos($msg, "card error")) {
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'>
+                <h2>Registration failed. Make sure your card number is valid.</h2></div>";
+                echo "<br>";
+                echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="register.php" class="registerbtn">Register to proceed</a></div>';
+            }
+            if (strpos($msg, "email exists")) {
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'>
+                <h2>An account is already associated with this email. Please login.</h2></div>";
+                echo "<br>";
+                echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="login.php" class="registerbtn">Login to proceed</a></div>';
+
+            }
         }
 
 
