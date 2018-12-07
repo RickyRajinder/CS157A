@@ -159,6 +159,7 @@
         $last = $_POST['last'];
         $email = $_POST['email'];
         $psw = $_POST['psw'];
+        $pswr = $_POST['psw-repeat'];
         $cardNum = $_POST['cardNum'];
         $addr = $_POST['addr'];
 
@@ -168,12 +169,19 @@
             $conn = new PDO("mysql:host=$servername;port=3306;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $newCustID = mt_rand(100000, 999999); //randomly generate 6-digit
-            $stmt = $conn->prepare("INSERT INTO Customer VALUES ($newCustID, '$psw', '$first', '$last', '$addr', '$email', '$cardNum')");
-            $stmt->execute();
-            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Thank you for registering, $first!</h2></div>";
-            echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Your Customer ID is $newCustID.</h2></div>";
-            echo "<br></br>";
-            echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="login.php" class="registerbtn">Login to proceed</a></div>';
+            if ($psw == $pswr){
+                $stmt = $conn->prepare("INSERT INTO Customer VALUES ($newCustID, '$psw', '$first', '$last', '$addr', '$email', '$cardNum')");
+                $stmt->execute();
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Thank you for registering, $first!</h2></div>";
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Your Customer ID is $newCustID.</h2></div>";
+                echo "<br></br>";
+                echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="login.php" class="registerbtn">Login to proceed</a></div>';
+            }
+            else {
+                echo "<div style='padding-left:16px; padding-right: 16px; padding-bottom: 16px'><h2>Passwords do not match. Please try again.</h2></div>";
+                echo "<br>";
+                echo '<div style=\'padding-left:16px; padding-right: 16px; padding-bottom: 16px\'><a href="register.php" class="registerbtn">Register to proceed</a></div>';
+            }
         }
         catch (PDOException $e) {
             $msg = $e->getMessage();
